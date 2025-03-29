@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Capsule</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Time Capsule</h1>
+        <p id="welcomeMessage">Welcome to your Time Capsule!</p>
+
+        <!-- Connect Wallet Button -->
+        <button id="connectButton">Connect MetaMask</button>
+
+        <!-- Capsule Section -->
+        <div id="capsuleSection" class="hidden">
+            <h2>Your Capsule</h2>
+            <p id="capsuleMessage">Loading...</p>
+            <p id="unlockTime">Unlock Time: Loading...</p>
+            <p id="capsuleStatus">Capsule Status: Loading...</p>
+            <button id="unlockButton">Unlock Capsule</button>
+        </div>
+
+        <!-- Error Section -->
+        <div id="errorMessage" class="hidden">
+            <p>Something went wrong. Please check your MetaMask connection or contract ABI.</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.1/dist/web3.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
