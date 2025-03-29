@@ -157,6 +157,12 @@ async function initWeb3() {
         try {
             await window.ethereum.request({ method: 'eth_requestAccounts' });
             userAddress = (await web3.eth.getAccounts())[0];
+            console.log("Connected Account:", userAddress);
+
+            // Ensure contract is initialized
+            contract = new web3.eth.Contract(contractABI, contractAddress);
+            console.log("Contract Loaded:", contract.methods);
+
             connectButton.style.display = "none";
             createCapsuleSection.style.display = "block";
         } catch (error) {
@@ -167,6 +173,7 @@ async function initWeb3() {
         alert("Please install MetaMask to use this app.");
     }
 }
+
 
 async function loadContract() {
     if (!web3) {
@@ -257,8 +264,8 @@ async function uploadToIPFS(file) {
     const response = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
         method: "POST",
         headers: {
-            pinata_api_key: "YOUR_PINATA_API_KEY",
-            pinata_secret_api_key: "YOUR_PINATA_SECRET_API_KEY"
+            pinata_api_key: "bb0c23403750e2249956",
+            pinata_secret_api_key: "1fd04cb7dadb0f93afd0813340e08a336dcdf58f5117bae5abaa4e61e5def094"
         },
         body: formData
     });
