@@ -89,3 +89,73 @@ To ensure everything is working smoothly, you can run tests for your smart contr
 ### Run Tests with Truffle (if using Truffle):
 ```bash
 truffle test
+```
+
+### Run Tests with Hardhat (if using Hardhat):
+```bash
+npx hardhat test
+```
+
+## 🔐 Deployment on Vercel
+
+1. **Deploy Frontend on Vercel:
+
+- Push the code to GitHub or any Git provider.
+
+- Link your GitHub repository to Vercel.
+
+- Set up environment variables in the Vercel dashboard to include the required keys:
+
+--`NEXT_PUBLIC_CONTRACT_ADDRESS`
+
+-`NEXT_PUBLIC_PINATA_API_KEY`
+
+-`NEXT_PUBLIC_PINATA_SECRET_API_KEY`
+
+-`NEXT_PUBLIC_EXPECTED_NETWORK_ID`
+
+Deploy the Smart Contract on Mainnet or Testnet:
+
+Ensure your smart contract is deployed on an Ethereum testnet like Ropsten or Goerli, or on the Ethereum mainnet.
+
+Once deployed, make sure the contract's address is updated in your .env.local file and in the Vercel environment variables.
+
+Access the Live App: Once deployed, you can access the live application at:
+Time Capsule Blockchain App
+
+🛠️ Troubleshooting
+MetaMask Wallet Issues:
+
+Ensure that your MetaMask is connected to the same network where your smart contract is deployed.
+
+If MetaMask is not showing your connected wallet, try logging out and logging back in.
+
+IPFS Uploading:
+
+If files are not uploading correctly to Pinata, ensure your API keys are correctly set in the .env.local file.
+
+Check the IPFS status page on Pinata to see if there are any outages or issues.
+
+Smart Contract Errors:
+
+If the smart contract is not executing correctly (e.g., "Transaction Reverted"), ensure that the contract’s state is correct (e.g., proper unlock time, valid data passed).
+
+Add console.log statements in the frontend to check the values being passed to the contract.
+
+🧑‍💻 Contributing
+Contributions are welcome! If you’d like to contribute to this project, follow these steps:
+
+Fork the repository
+
+Create a new branch for your changes
+
+Make your changes and commit them
+
+Push your changes and create a pull request
+
+📝 License
+This project is licensed under the MIT License - see the LICENSE.md file for details.
+
+🚀 Conclusion
+The Time Capsule blockchain project provides an innovative solution to securely store data and messages for future access. Using Ethereum, IPFS, and smart contracts, it ensures decentralization, immutability, and security for sensitive data. With the user-friendly interface, users can create and interact with their capsules, creating memories or important files that can be unlocked at a specific future time.
+
