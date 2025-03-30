@@ -181,19 +181,36 @@ async function loadContract() {
         return;
     }
     try {
-        contract = new web3.eth.Contract(contractABI, contractAddress);
-        console.log("Contract Loaded:", contract.methods);
+        // Initialize contract if not already initialized
+        if (!contract) {
+            contract = new web3.eth.Contract(contractABI, contractAddress);
+        }
 
         // Get the capsule status (message, unlockTime, isOpened)
         const status = await contract.methods.getCapsuleStatus().call();
         console.log("Capsule Status:", status);
 
-        // Display message and unlock time
-        const message = status[0];
+        const message = status[0]; // This could be text or an IPFS hash
         const unlockTime = status[1];
         const isOpened = status[2];
 
-        capsuleMessageElement.innerHTML = message;
+        // Check if the capsule is opened
+        if (isOpened) {
+            // Display message or file download link
+            if (message.startsWith("Qm")) { // Simple check if it's an IPFS hash (IPFS CIDs usually start with "Qm")
+                // Display download link if it's an IPFS hash
+                downloadFileLink.style.display = "inline-block";
+                downloadFileLink.href = `https://gateway.pinata.cloud/ipfs/${message}`;
+                downloadFileLink.innerText = "Download File";
+            } else {
+                // Display text message if it's not an IPFS hash
+                capsuleMessageElement.innerHTML = message;
+            }
+        } else {
+            capsuleMessageElement.innerHTML = "Capsule is still locked.";
+            downloadFileLink.style.display = "none";
+        }
+
         unlockTimeElement.innerText = `Unlock Time: ${new Date(unlockTime * 1000).toLocaleString()}`;
         capsuleStatusElement.innerText = `Capsule Status: ${isOpened ? "Opened" : "Locked"}`;
 
@@ -207,6 +224,7 @@ async function loadContract() {
         alert("Error loading contract.");
     }
 }
+
 
 // Handle text capsule creation
 async function createTextCapsule() {
@@ -275,14 +293,22 @@ async function uploadToIPFS(file) {
 
 async function unlockCapsule() {
     try {
+        console.log("Attempting to unlock capsule...");
+        
+        // Unlock the capsule by calling the smart contract method
         await contract.methods.openCapsule().send({ from: userAddress });
+
         alert("Capsule Unlocked!");
-        loadContract();  // Refresh the contract data after unlocking
+        
+        // After unlocking, retrieve the updated capsule status (message or IPFS hash)
+        loadContract();  // Refresh the contract data
+
     } catch (error) {
         console.error("Error unlocking capsule:", error);
         alert("Error unlocking the capsule.");
     }
 }
+
 
 connectButton.addEventListener("click", initWeb3);
 createTextCapsuleButton.addEventListener("click", () => { textCapsuleSection.style.display = "block"; });
@@ -290,3 +316,14 @@ createFileCapsuleButton.addEventListener("click", () => { fileCapsuleSection.sty
 createCapsuleButton.addEventListener("click", createTextCapsule);
 uploadFileButton.addEventListener("click", uploadFile);
 unlockButton.addEventListener("click", unlockCapsule);
+contract.events.CapsuleOpened({
+    fromBlock: 'latest'
+}, function(error, event) {
+    if (error) {
+        console.error("Error emitting CapsuleOpened event:", error);
+    } else {
+        console.log("CapsuleOpened event:", event);
+        // You can call loadContract() here if needed to update the UI
+    }
+});
+
