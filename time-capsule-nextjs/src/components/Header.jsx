@@ -87,13 +87,14 @@ const Header = () => {
             <div className="flex-shrink-0">
               <h1 className="text-xl font-bold">Time Capsule</h1>
             </div>
+            
             <div className="ml-4 md:ml-6 text-sm">
-              {network && <span className="px-2 py-1 rounded bg-blue-700">{network}</span>}
+              {network && <span className="px-3 py-1 rounded bg-green-500">{network}</span>}
             </div>
           </div>
-          <div>
+          <div >
             {account ? (
-              <div className="px-3 py-1 text-sm rounded bg-blue-700">
+              <div className="px-3 py-1 text-sm rounded bg-green-500">
                 Connected: {formatAddress(account)}
               </div>
             ) : (

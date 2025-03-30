@@ -1,26 +1,285 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Dark theme color palette */
+  --background: #121212;
+  --card-background: #1e1e1e;
+  --foreground: #e0e0e0;
+  --foreground-secondary: #a0a0a0;
+  --accent: #1a73e8;  /* Keep similar blue from your header */
+  --accent-light: #2196f3;
+  --accent-hover: #1565c0;
+  --border: #333333;
+  --success: #4caf50;
+  --warning: #ff9800;
+  --error: #f44336;
+  --input-background: #252525;
+  --input-text: #e0e0e0;
+  --input-border: #444444;
+  --step-background: #1e1e1e;
+  --step-icon: #1a73e8;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
 }
+
+/* Header styles */
+header, .header {
+  background-color: var(--accent);
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Card containers */
+.card {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--foreground);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.75rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+/* Buttons */
+button, .button {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 1rem;
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+}
+
+button:hover, .button:hover {
+  background-color: var(--accent-hover);
+}
+
+button:disabled, .button:disabled {
+  background-color: var(--border);
+  color: var(--foreground-secondary);
+  cursor: not-allowed;
+}
+
+/* Input fields */
+input[type="text"], 
+input[type="number"], 
+input[type="email"],
+input[type="password"],
+textarea, 
+select {
+  color: var(--input-text);
+  background-color: var(--input-background);
+  border: 1px solid var(--input-border);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  width: 100%;
+  transition: border-color 0.2s ease;
+  margin-bottom: 1rem;
+}
+
+input:focus, 
+textarea:focus, 
+select:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+}
+
+/* Placeholder styling */
+::placeholder {
+  color: var(--foreground-secondary);
+  opacity: 0.7;
+}
+
+/* Main content container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Step indicators in How It Works section */
+.step {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.step-icon {
+  background-color: var(--step-background);
+  color: var(--step-icon);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  flex-shrink: 0;
+  border: 1px solid var(--step-icon);
+}
+
+.step-content h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.step-content p {
+  color: var(--foreground-secondary);
+  margin-top: 0;
+}
+
+/* Error notification */
+.error-notification {
+  background-color: rgba(244, 67, 54, 0.1);
+  border-left: 4px solid var(--error);
+  color: var(--error);
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Wallet connection status */
+.wallet-status {
+  background-color: rgba(26, 115, 232, 0.1);
+  color: var(--accent-light);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+/* Caption text */
+.caption {
+  color: var(--foreground-secondary);
+  font-size: 0.875rem;
+}
+
+/* Center text alignment helper */
+.text-center {
+  text-align: center;
+}
+
+/* Two-column grid for buttons */
+.button-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .button-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* Fix for low contrast text - add this to your globals.css */
+
+/* Main headings - ensure they're dark and visible */
+h1, h2, h3, h4, h5, h6 {
+    color: #111111 !important;
+    font-weight: 600 !important;
+  }
+  
+  /* Fix the "Your Blockchain Time Capsule" heading */
+  .card h2, .card h3 {
+    color: #111111 !important;
+  }
+  
+  /* Fix the "How It Works" heading */
+  .card h2, .card-title {
+    color: #111111 !important;
+    font-weight: 600 !important;
+  }
+  
+  /* Fix the step headings in the How It Works section */
+  .step-title {
+    color: #111111 !important;
+    font-weight: 600 !important;
+  }
+  
+  /* Fix the description text in steps */
+  .step-description, p {
+    color: #333333 !important;
+  }
+  
+  /* Fix "What would you like to do?" text */
+  .card p, .caption, .description {
+    color: #333333 !important;
+  }
+  
+  /* Input fields */
+  input[type="text"], 
+  input[type="number"], 
+  input[type="email"],
+  input[type="password"],
+  textarea, 
+  select {
+    color: #333333 !important;
+    background-color: #f9f9f9 !important;
+    border: 1px solid #cccccc !important;
+  }
+  
+  /* For numbered steps (1, 2, 3) */
+  .step-number {
+    background-color: #e6f0ff !important;
+    color: #1a73e8 !important;
+    font-weight: 600 !important;
+  }
+  
+  /* General text */
+  body, div, span {
+    color: #333333 !important;
+  }
+  
+  /* Ensure button text is white and visible */
+  button, .button {
+    color: white !important;
+  }
+  
+  /* Dark error text */
+  .error-message {
+    color: #d32f2f !important;
+  }

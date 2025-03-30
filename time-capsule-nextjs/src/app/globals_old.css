@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Style input fields */
+input[type="text"], input[type="number"], textarea {
+  color: #333; /* Dark color for better visibility */
+  background-color: #f9f9f9; /* Light background */
+  border: 1px solid #ccc; /* Border for better definition */
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px; /* Optional: for rounded corners */
+}
+
+/* Add focus styling to improve visibility on focus */
+input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
+  border-color: #007bff; /* Highlighted border color */
+  outline: none; /* Remove the default outline */
+}
+
+/* Dark mode input styles */
+@media (prefers-color-scheme: dark) {
+  input[type="text"], input[type="number"], textarea {
+    background-color: #333; /* Darker background in dark mode */
+    color: #f1f1f1; /* Lighter text color for dark mode */
+    border: 1px solid #444; /* Darker border */
+  }
+
+  input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
+    border-color: #3399ff; /* Lighter blue border when focused in dark mode */
+  }
+}
