@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { getAccount, getWeb3 } from '../utils/web3';
 import { formatAddress } from '../utils/formatters';
 import Button from './ui/Button';
+import { initWeb3 } from '../utils/web3'; // make sure this is imported at the top
 
 const Header = () => {
   const [account, setAccount] = useState('');
@@ -14,10 +15,15 @@ const Header = () => {
   useEffect(() => {
     const fetchAccount = async () => {
       try {
+        const initialized = await initWeb3();
+        if (!initialized) {
+          console.warn('Web3 not initialized');
+          return;
+        }
+    
         const userAccount = await getAccount();
         setAccount(userAccount);
-        
-        // Get network name
+    
         const web3 = getWeb3();
         const networkId = await web3.eth.net.getId();
         const networks = {
@@ -29,6 +35,7 @@ const Header = () => {
           56: 'Binance Smart Chain',
           137: 'Polygon',
           80001: 'Mumbai',
+          11155111: 'Sepolia'
         };
         setNetwork(networks[networkId] || `Network ID: ${networkId}`);
       } catch (error) {
@@ -60,6 +67,7 @@ const Header = () => {
     setIsConnecting(true);
     
     try {
+      await initWeb3(); 
       await window.ethereum.request({ method: 'eth_requestAccounts' });
       const userAccount = await getAccount();
       setAccount(userAccount);

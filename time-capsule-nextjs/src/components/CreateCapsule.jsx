@@ -10,6 +10,7 @@ import Input from './ui/Input';
 import Textarea from './ui/Textarea';
 import FileUpload from './FileUpload';
 import Loading from './Loading';
+import Web3 from "web3";
 
 const CreateCapsule = () => {
   const [file, setFile] = useState(null);
@@ -63,6 +64,7 @@ const CreateCapsule = () => {
       return;
     }
 
+    
     if (!unlockTime) {
       setError('Please select an unlock time.');
       return;
@@ -109,13 +111,19 @@ const CreateCapsule = () => {
       const metadataHash = await uploadJSONToIPFS(capsuleData);
 
       // Create capsule on-chain
-      const transaction = await contract.methods.createCapsule(
-        metadataHash,
-        recipient || account,
-        unixTimestamp
-      ).send({
-        from: account,
-      });
+      const hashedMetadata = Web3.utils.keccak256(metadataHash);
+
+      console.log("📦 Creating Capsule With:");
+console.log("Message/IPFS Hash:", message);
+console.log("Unlock Time:", unlockTime);
+console.log("From:", account);
+
+
+const transaction = await contract.methods.createCapsule(
+  hashedMetadata,
+  recipient || account,
+  unixTimestamp
+).send({ from: account });
 
       setSuccess(true);
       setTxHash(transaction.transactionHash);

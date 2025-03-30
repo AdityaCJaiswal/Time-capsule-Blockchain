@@ -29,6 +29,7 @@ export default function Home() {
         if (connected && view === 'intro') {
           // Check if user has any capsules already
           try {
+
             const account = await getAccount();
             // This is where you could check for existing capsules
             // For now, we'll just keep the intro view

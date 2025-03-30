@@ -14,6 +14,7 @@ export default function CapsuleList({ onViewCapsule }) {
   useEffect(() => {
     const fetchCapsule = async () => {
       try {
+        
         const user = await getAccount();
         setAccount(user);
         const contract = getContract();
