@@ -3,6 +3,8 @@
 ## 🚀 Project Vision
 The **Time Capsule** blockchain project allows users to create digital time capsules that securely store messages, files, or other data. These capsules are time-locked, meaning they can only be accessed after a specific date and time that the user sets. This project utilizes blockchain technology (Ethereum), **IPFS** for file storage, and **smart contracts** to ensure data integrity and security. The project aims to provide a decentralized, secure, and transparent way to store and share messages or files that are intended to be opened in the future.
 
+---
+
 ## 🎯 Concept
 In today’s digital world, preserving memories or important data to be accessed in the future has become an intriguing idea. The **Time Capsule** allows users to encrypt and store data in a blockchain-based application. Each capsule is time-locked, and it can only be opened by the user or someone they designate once the unlock time has passed. This ensures that the contents remain private and inaccessible until the specified time.
 
@@ -10,6 +12,8 @@ The **Time Capsule** concept also includes:
 - **Decentralized Storage** using **IPFS**.
 - **Smart Contracts** on **Ethereum** to control access and ensure immutability.
 - Ability to create, store, and retrieve capsules securely.
+
+---
 
 ## 📦 Technologies Used
 - **Blockchain**: Ethereum Smart Contracts
@@ -21,12 +25,16 @@ The **Time Capsule** concept also includes:
 - **Next.js**: For server-side rendering and building the web application
 - **MetaMask**: To interact with Ethereum blockchain
 
+---
+
 ## ⚙️ Project Features
 1. **Create Time Capsule**: Users can create time capsules by entering a message or uploading a file. They can also set an unlock time in the future.
 2. **Time-Locked**: The content inside the capsule is locked until the specified unlock time.
 3. **Open Capsule**: After the unlock time has passed, users can open the capsule and access the contents.
 4. **Decentralized File Storage**: Files are securely stored on IPFS and can be retrieved using their unique hash.
 5. **Blockchain Integration**: Ethereum smart contracts ensure the integrity, ownership, and unlock time of each capsule.
+
+---
 
 ## 📚 Setup Instructions
 
@@ -62,7 +70,6 @@ The **Time Capsule** concept also includes:
 5. **Open the App**:
     Once the server starts, open your browser and go to `http://localhost:3000` to view the application.
 
----
 
 ### 2. **How to Run Directly on Remix (For Quick Testing)**
 
@@ -96,6 +103,8 @@ truffle test
 npx hardhat test
 ```
 
+---
+
 ## 🔐 Deployment on Vercel
 
 1. **Deploy Frontend on Vercel**:
@@ -115,6 +124,7 @@ npx hardhat test
     Once deployed, you can access the live application at:  
     [**Time Capsule Blockchain App**](https://time-capsule-blockchain.vercel.app/)
 
+---
 
 ## 🛠️ Troubleshooting
 
@@ -129,6 +139,8 @@ npx hardhat test
 3. **Smart Contract Errors**:
    - If the smart contract is not executing correctly (e.g., "Transaction Reverted"), ensure that the contract’s state is correct (e.g., proper unlock time, valid data passed).
    - Add `console.log` statements in the frontend to check the values being passed to the contract.
+
+---
 
 ## 🧑‍💻 Contributing
 
@@ -145,6 +157,10 @@ Contributions are welcome! If you’d like to contribute to this project, follow
 
 This project is licensed under the **MIT License** - see the [LICENSE.md](LICENSE.md) file for details.
 
+---
+
 ## 🚀 Conclusion
 
 The Time Capsule blockchain project provides an innovative solution to securely store data and messages for future access. Using Ethereum, IPFS, and smart contracts, it ensures decentralization, immutability, and security for sensitive data. With the user-friendly interface, users can create and interact with their capsules, creating memories or important files that can be unlocked at a specific future time.
+
+---
