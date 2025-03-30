@@ -64,7 +64,6 @@ const CreateCapsule = () => {
       return;
     }
 
-    
     if (!unlockTime) {
       setError('Please select an unlock time.');
       return;
@@ -75,6 +74,13 @@ const CreateCapsule = () => {
     
     if (unixTimestamp <= currentTime) {
       setError('Unlock time must be in the future.');
+      return;
+    }
+
+    // Check if unlock time is more than 10 years in the future
+    const maxUnlockTime = currentTime + (10 * 365 * 24 * 60 * 60); // 10 years in seconds
+    if (unixTimestamp > maxUnlockTime) {
+      setError('Unlock time cannot be more than 10 years in the future.');
       return;
     }
 
@@ -93,9 +99,13 @@ const CreateCapsule = () => {
         message: message,
         createdAt: new Date().toISOString(),
         createdBy: account,
-        recipient: recipient || account,
         unlockTime: unixTimestamp,
       };
+
+      // If recipient is provided, add it to metadata (but not used for contract)
+      if (recipient && Web3.utils.isAddress(recipient)) {
+        capsuleData.intendedRecipient = recipient;
+      }
 
       // Upload file to IPFS if provided
       let contentHash;
@@ -110,20 +120,21 @@ const CreateCapsule = () => {
       // Upload metadata to IPFS
       const metadataHash = await uploadJSONToIPFS(capsuleData);
 
-      // Create capsule on-chain
-      const hashedMetadata = Web3.utils.keccak256(metadataHash);
-
       console.log("📦 Creating Capsule With:");
-console.log("Message/IPFS Hash:", message);
-console.log("Unlock Time:", unlockTime);
-console.log("From:", account);
+      console.log("Contract address:", contract._address);
+      console.log("Metadata IPFS Hash:", metadataHash);
+      console.log("Unlock Time:", unixTimestamp);
+      console.log("From:", account);
 
-
-const transaction = await contract.methods.createCapsule(
-  hashedMetadata,
-  recipient || account,
-  unixTimestamp
-).send({ from: account });
+      // CRITICAL FIX: Only pass the metadata hash and unlock time
+      // Your contract expects only 2 parameters: message (string) and unlockTime (uint256)
+      const transaction = await contract.methods.createCapsule(
+        metadataHash,  // Pass the IPFS hash as the message
+        unixTimestamp
+      ).send({ 
+        from: account,
+        gas: 300000 // Explicit gas limit
+      });
 
       setSuccess(true);
       setTxHash(transaction.transactionHash);
@@ -198,7 +209,7 @@ const transaction = await contract.methods.createCapsule(
             id="recipient"
             value={recipient}
             onChange={handleRecipientChange}
-            placeholder="Ethereum address (leave empty to send to yourself)"
+            placeholder="Ethereum address (for metadata only, not stored on chain)"
           />
           
           {error && (
