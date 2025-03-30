@@ -6,7 +6,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import CreateCapsule from '../components/CreateCapsule';
 import DisplayCapsule from '../components/DisplayCapsule';
-//import CapsuleList from '../components/CapsuleList';
+import CapsuleList from '../components/CapsuleList';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Loading from '../components/Loading';
@@ -126,7 +126,7 @@ export default function Home() {
               </Button>
               
               <p className="mt-4 text-sm text-gray-500">
-                You'll need MetaMask or another Ethereum wallet to use this application.
+                You&apos;ll need MetaMask or another Ethereum wallet to use this application.
               </p>
             </div>
           </Card>
