@@ -91,7 +91,7 @@ export default function Home() {
           >
             <div className="text-center py-8">
               <div className="mb-8">
-                <h2 className="text-3xl font-bold text-blue-600 mb-4">Secure Your Memories in Time</h2>
+                <h2 className="text-3xl font-bold text-blue-600 mb-4">Secure Your Memories and Secrets in Time</h2>
                 <p className="text-lg text-gray-600 mb-6">
                   Create digital time capsules that are securely stored on the blockchain 
                   and can only be opened at the date and time you specify.

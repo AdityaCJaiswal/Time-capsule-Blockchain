@@ -7,7 +7,6 @@ import { getIPFSUrl, getIPFSContentType } from '../utils/ipfs';
 import Card from './ui/Card';
 import Button from './ui/Button';
 import Loading from './Loading';
-import CapsuleStatus from './CapsuleStatus';
 
 const DisplayCapsule = ({ address }) => {
   const [loading, setLoading] = useState(true);
@@ -32,38 +31,44 @@ const DisplayCapsule = ({ address }) => {
         setCurrentAccount(account);
         
         // Check if user is the owner
-        setIsOwner(address.toLowerCase() === account.toLowerCase());
+        const userIsOwner = address.toLowerCase() === account.toLowerCase();
+        setIsOwner(userIsOwner);
         
-        // Get capsule data using getCapsuleStatus if it's the user's own capsule
-        // or using the public capsules mapping if it's someone else's
+        // Get capsule data
         let capsuleData;
         
-        if (isOwner) {
-          // Get user's own capsule using getCapsuleStatus
-          const [message, unlockTime, isOpened] = await contract.methods.getCapsuleStatus().call({ from: account });
-          capsuleData = {
-            message,
-            unlockTime,
-            isOpened,
-            owner: account
-          };
-        } else {
-          // Access another user's capsule through the public mapping
-          // Note: This requires your contract's mapping to be public
-          const capsuleInfo = await contract.methods.capsules(address).call();
-          capsuleData = {
-            message: capsuleInfo.message,
-            unlockTime: capsuleInfo.unlockTime,
-            isOpened: capsuleInfo.isOpened,
-            owner: address
-          };
-        }
-        
-        setCapsule(capsuleData);
-        
-        // If no message (capsule doesn't exist), return early
-        if (!capsuleData.message || capsuleData.message === '') {
-          setError('No capsule found for this address.');
+        try {
+          if (userIsOwner) {
+            // Get user's own capsule using getCapsuleStatus
+            const [message, unlockTime, isOpened] = await contract.methods.getCapsuleStatus().call({ from: account });
+            capsuleData = {
+              message,
+              unlockTime,
+              isOpened,
+              owner: account
+            };
+          } else {
+            // Access another user's capsule through the public mapping
+            const capsuleInfo = await contract.methods.capsules(address).call();
+            capsuleData = {
+              message: capsuleInfo.message,
+              unlockTime: capsuleInfo.unlockTime,
+              isOpened: capsuleInfo.isOpened,
+              owner: address
+            };
+          }
+          
+          setCapsule(capsuleData);
+          
+          // If no message (capsule doesn't exist), return early
+          if (!capsuleData.message || capsuleData.message === '') {
+            setError('No capsule found for this address.');
+            setLoading(false);
+            return;
+          }
+        } catch (contractError) {
+          console.error('Contract interaction error:', contractError);
+          setError('Error accessing blockchain data. Please make sure you have MetaMask connected.');
           setLoading(false);
           return;
         }
@@ -72,6 +77,11 @@ const DisplayCapsule = ({ address }) => {
         try {
           const metadataUrl = getIPFSUrl(capsuleData.message);
           const response = await fetch(metadataUrl);
+          
+          if (!response.ok) {
+            throw new Error(`Failed to fetch metadata: ${response.status}`);
+          }
+          
           const data = await response.json();
           setMetadata(data);
           
@@ -97,7 +107,7 @@ const DisplayCapsule = ({ address }) => {
     };
 
     fetchCapsule();
-  }, [address, isOwner]);
+  }, [address]); // Only address as dependency
 
   // Function to render file preview based on content type
   const renderFilePreview = () => {
@@ -174,6 +184,37 @@ const DisplayCapsule = ({ address }) => {
     }
   };
 
+  // Function to handle anyone opening an unlocked capsule
+  const handleOpenCapsuleByAnyone = async () => {
+    if (!capsule || isOwner || !isUnlocked() || capsule.isOpened) return;
+    
+    setLoading(true);
+    setError('');
+    
+    try {
+      const contract = getContract();
+      const account = await getAccount();
+      
+      // Call the openCapsuleByAnyone function
+      await contract.methods.openCapsuleByAnyone(capsule.owner).send({ 
+        from: account,
+        gas: 200000
+      });
+      
+      // Update the local state to show capsule as opened
+      setCapsule({
+        ...capsule,
+        isOpened: true
+      });
+      
+    } catch (error) {
+      console.error('Error opening capsule:', error);
+      setError('Failed to open the capsule. ' + (error.message || 'Please try again.'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Function to check if capsule is unlocked (time has passed)
   const isUnlocked = () => {
     if (!capsule) return false;
@@ -183,12 +224,10 @@ const DisplayCapsule = ({ address }) => {
 
   // Function to check if user can access content
   const canAccessContent = () => {
-    if (!capsule || !currentAccount) return false;
+    if (!capsule) return false;
     
-    // User can access if:
-    // 1. Time has passed AND it's their own capsule
-    // 2. OR the capsule has been opened already
-    return (isUnlocked() && isOwner) || capsule.isOpened;
+    // User can access if the capsule has been opened
+    return capsule.isOpened;
   };
 
   if (loading) {
@@ -256,6 +295,12 @@ const DisplayCapsule = ({ address }) => {
                 Open Capsule
               </Button>
             )}
+            
+            {!isOwner && isUnlocked() && !capsule.isOpened && (
+              <Button onClick={handleOpenCapsuleByAnyone} variant="secondary">
+                Open Capsule
+              </Button>
+            )}
           </div>
         </div>
         
@@ -304,7 +349,7 @@ const DisplayCapsule = ({ address }) => {
                 <p className="text-yellow-700">
                   {isOwner ? 
                     "Click the 'Open Capsule' button to view the contents." : 
-                    "Only the owner can open and view this capsule."}
+                    "The owner must open this capsule before it can be viewed."}
                 </p>
               ) : (
                 <p className="text-yellow-700">
