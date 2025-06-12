@@ -176,7 +176,7 @@ export default function Home() {
                     </div>
                     
                     <div className="flex items-start">
-                      <div className="flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
+                      <div className="flex-shrink-0 listh-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
                         <span className="text-blue-600 font-bold">2</span>
                       </div>
                       <div className="ml-4">
